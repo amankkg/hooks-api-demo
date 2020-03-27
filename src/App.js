@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 
 function timeLogger() {
@@ -7,40 +7,49 @@ function timeLogger() {
   console.log(date.toLocaleTimeString())
 }
 
-class App extends React.Component {
-  state = {
-    value: 0
-  }
+function App() {
+  // state = {value: 0}
+  const [value, setValue] = useState(0)
 
-  componentDidMount() {
-    this.intervalId = setInterval(timeLogger, 1000)
-  }
+  // decrement = () => this.setState(prevState => ({value: prevState.value - 1}))
+  const decrement = () => setValue(prevValue => prevValue - 1)
 
-  componentDidUpdate() {
-    console.log(this.state.value)
-  }
+  // increment = () => this.setState(prevState => ({value: prevState.value + 1}))
+  const increment = () => setValue(prevValue => prevValue + 1)
 
-  componentWillUnmount() {
-    clearInterval(this.intervalId)
-  }
+  // componentDidUpdate() {
+  //   console.log(this.state.value)
+  // }
+  useEffect(() => {
+    console.log(value)
+  })
 
-  decrement = () => this.setState(prevState => ({value: prevState.value - 1}))
+  // componentDidMount() {
+  //   this.intervalId = setInterval(timeLogger, 1000)
+  // }
+  //
+  // componentWillUnmount() {
+  //   clearInterval(this.intervalId)
+  // }
+  useEffect(() => {
+    const intervalId = setInterval(timeLogger, 1000)
 
-  increment = () => this.setState(prevState => ({value: prevState.value + 1}))
+    const clear = () => clearInterval(intervalId)
 
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <p>
-            Counter: {this.state.value}
-          </p>
-          <button onClick={this.decrement}>decrement</button>
-          <button onClick={this.increment}>increment</button>
-        </header>
-      </div>
-    );
-  }
+    return clear
+  }, [])
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <p>
+          Counter: {value}
+        </p>
+        <button onClick={decrement}>decrement</button>
+        <button onClick={increment}>increment</button>
+      </header>
+    </div>
+  );
 }
 
 export default App;
